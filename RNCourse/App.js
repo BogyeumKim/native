@@ -4,13 +4,14 @@ import { StyleSheet, Text, View ,Button, TextInput } from 'react-native';
 export default function App() {
 
   const [enteredText, setEnteredText] = useState('');
+  const [course, setCourse] = useState([]);
 
   function inputHandler(enteredText) {
     setEnteredText(enteredText);
   };
 
   function addHandler() {
-    console.log(enteredText)
+    setCourse(currentCourse => [...currentCourse,enteredText])
   };
 
 
@@ -23,9 +24,7 @@ export default function App() {
       </View>
 
       <View style={styles.goalsContainer}>
-        <Text>
-          List of goals...
-        </Text>
+        {course.map((item,index) => <Text key={index}>{item}</Text>)}
       </View>
 
     </View>
