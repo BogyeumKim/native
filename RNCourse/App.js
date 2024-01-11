@@ -1,12 +1,25 @@
+import { useState } from 'react';
 import { StyleSheet, Text, View ,Button, TextInput } from 'react-native';
 
 export default function App() {
+
+  const [enteredText, setEnteredText] = useState('');
+
+  function inputHandler(enteredText) {
+    setEnteredText(enteredText);
+  };
+
+  function addHandler() {
+    console.log(enteredText)
+  };
+
+
   return (
     <View style={styles.appContainer}>
 
       <View style={styles.inputContainer}>
-        <TextInput style={styles.TextInput} placeholder='입력하는곳임'/>
-        <Button title='Goal'></Button>
+        <TextInput style={styles.TextInput} placeholder='입력하는곳임' onChangeText={inputHandler} />
+        <Button title='Goal' onPress={addHandler} />
       </View>
 
       <View style={styles.goalsContainer}>
