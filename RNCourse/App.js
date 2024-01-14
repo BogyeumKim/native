@@ -13,8 +13,10 @@ export default function App() {
     setCourse(currentCourse => [...currentCourse,{text : enteredText, id : Math.random().toString()}])
   };
 
-  function deleteHandler(){
-    console.log('DELETE');
+  function deleteHandler(id){
+    setCourse(currentItem =>{
+      return currentItem.filter((item) => item.id !== id);
+    } );
   }
 
 
@@ -25,7 +27,12 @@ export default function App() {
       
       <View style={styles.goalsContainer}>
         <FlatList data={course} renderItem={itemData => {
-          return <GoalItem item={itemData.item} onDeleteItem={deleteHandler} />;
+          return <GoalItem 
+                item={itemData.item} 
+                onDeleteItem={deleteHandler} 
+                id={itemData.item.id}
+
+          />;
         }} 
         keyExtractor={(item, index)=>{
           return item.id;
