@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, Text, View ,Button, TextInput } from 'react-native';
+import { StyleSheet, Text, View ,Button, TextInput,ScrollView } from 'react-native';
 
 export default function App() {
 
@@ -24,13 +24,14 @@ export default function App() {
       </View>
       
       <View style={styles.goalsContainer}>
-        {course.map((item,index) =>
-        <View style={styles.goalItem} key={index}>
-         <Text style={styles.goalText}>{item}</Text>
-         </View>
-         )}
+        <ScrollView alwaysBounceVertical={false}>
+          {course.map((item,index) =>
+          <View style={styles.goalItem} key={index}>
+            <Text style={styles.goalText}>{item}</Text>
+          </View>
+          )}
+        </ScrollView>
       </View>
-
     </View>
   );
 }
