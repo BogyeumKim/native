@@ -7,6 +7,7 @@ import {
   TextInput,
   FlatList,
 } from "react-native";
+import { StatusBar } from 'expo-status-bar'
 import GoalItem from "./components/GoalItem";
 import GoalInput from "./components/GoalInput";
 
@@ -37,6 +38,8 @@ export default function App() {
   }
 
   return (
+    <>
+    <StatusBar style="light" />
     <View style={styles.appContainer}>
       <Button
         title='Add New Goal'
@@ -69,6 +72,7 @@ export default function App() {
         ></FlatList>
       </View>
     </View>
+    </>
   );
 }
 
@@ -77,6 +81,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 50,
     paddingHorizontal: 16,
+  
   },
 
   goalsContainer: {
