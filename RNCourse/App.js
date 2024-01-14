@@ -22,9 +22,13 @@ export default function App() {
         <TextInput style={styles.TextInput} placeholder='입력하는곳임' onChangeText={inputHandler} />
         <Button title='Goal' onPress={addHandler} />
       </View>
-
+      
       <View style={styles.goalsContainer}>
-        {course.map((item,index) => <Text key={index}>{item}</Text>)}
+        {course.map((item,index) =>
+        <View style={styles.goalItem} key={index}>
+         <Text style={styles.goalText}>{item}</Text>
+         </View>
+         )}
       </View>
 
     </View>
@@ -58,7 +62,17 @@ const styles = StyleSheet.create({
 
  goalsContainer: {
   flex:5
- }
+ },
 
+ goalItem : {
+  margin:8,
+  padding:8,
+  borderRadius:6,
+  backgroundColor:'#5e0acc',
+ },
+
+ goalText : {
+  color:'white'
+ }
  
 });
