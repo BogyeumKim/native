@@ -10,8 +10,14 @@ function StartGameScreen() {
         autoCapitalize="none" // 자동 대문자 변경
         autoCorrect={false} // 대소문자 변경 방지
       />
-      <PrimaryButton>Reset</PrimaryButton>
-      <PrimaryButton>Confirm</PrimaryButton>
+      <View style={styles.buttonsContainer}>
+        <View style={styles.buttonContainer}>
+          <PrimaryButton>Reset</PrimaryButton>
+        </View>
+        <View style={styles.buttonContainer}>
+          <PrimaryButton>Confirm</PrimaryButton>
+        </View>
+      </View>
     </View>
   );
 }
@@ -19,6 +25,8 @@ function StartGameScreen() {
 const styles = StyleSheet.create({
   inputContainer: {
     // flex : 1 ,
+    justifyContent: "center",
+    alignItems: "center",
     padding: 16,
     marginTop: 100,
     marginHorizontal: 16,
@@ -44,6 +52,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignSelf: "center",
   },
+  buttonsContainer: {
+    flexDirection: "row",
+  },
+  buttonContainer : {
+    flex : 1 ,
+  }
 });
 
 export default StartGameScreen;
