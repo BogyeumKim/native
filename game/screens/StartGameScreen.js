@@ -1,6 +1,31 @@
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, View, Alert } from "react-native";
+import { useState } from "react";
+
 import PrimaryButton from "../components/PrimaryButton";
-function StartGameScreen() {
+function StartGameScreen({onPickNumber}) {
+  const [enteredNumber, setEnteredNumber] = useState("");
+
+  function numberInputHandler(enteredText) {
+    setEnteredNumber(enteredText);
+  }
+
+  function resetInputHandler() {
+    setEnteredNumber("");
+  }
+
+  function confirmInputHandler() {
+    const choseNumber = parseInt(enteredNumber);
+      console.log(enteredNumber);
+    if (isNaN(choseNumber) || choseNumber <= 0 || choseNumber > 99) {
+      Alert.alert("유효하지않음!", "숫자입력하되 1~99만됨", [
+        { text: "Okay", style: "destructive", onPress: resetInputHandler },
+      ]);      
+      return;
+    }
+
+    onPickNumber(choseNumber);
+  }
+
   return (
     <View style={styles.inputContainer}>
       <TextInput
@@ -9,13 +34,15 @@ function StartGameScreen() {
         keyboardType="number-pad"
         autoCapitalize="none" // 자동 대문자 변경
         autoCorrect={false} // 대소문자 변경 방지
+        value={enteredNumber}
+        onChangeText={numberInputHandler}
       />
       <View style={styles.buttonsContainer}>
         <View style={styles.buttonContainer}>
-          <PrimaryButton>Reset</PrimaryButton>
+          <PrimaryButton onpress={resetInputHandler}>Reset</PrimaryButton>
         </View>
         <View style={styles.buttonContainer}>
-          <PrimaryButton>Confirm</PrimaryButton>
+          <PrimaryButton onpress={confirmInputHandler}>Confirm</PrimaryButton>
         </View>
       </View>
     </View>
@@ -30,7 +57,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginTop: 100,
     marginHorizontal: 16,
-    backgroundColor: "#4e0329",
+    backgroundColor: "#3b021f",
     borderRadius: 8,
     elevation: 4, // 안드로이드 전용 , border끝에 그림자효과
 
@@ -55,9 +82,9 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     flexDirection: "row",
   },
-  buttonContainer : {
-    flex : 1 ,
-  }
+  buttonContainer: {
+    flex: 1,
+  },
 });
 
 export default StartGameScreen;
