@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, Alert } from "react-native";
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import Title from "../components/ui/Title";
 import NumberContainer from "../components/game/NumberContainer";
 import PrimaryButton from "../components/ui/PrimaryButton";
@@ -17,13 +17,19 @@ function generateRandomBetween(min, max, exclude) {
 let minBoundary = 1;
 let maxBoundary = 100;
 
-function GameScreen({ userNumber }) {
+function GameScreen({ userNumber , onGameOver }) {
   const initalGuess = generateRandomBetween(
-    minBoundary,
-    maxBoundary,
+    1,
+    100,
     userNumber
   );
   const [currentGuess, setCurrentGuess] = useState(initalGuess);
+
+  useEffect(() => {
+    if(currentGuess === userNumber){
+        onGameOver();
+    }
+  },[currentGuess,userNumber,onGameOver])
 
   function nextGuessHandler(direction) {
     // direction => 'lower' , 'greater'
@@ -31,7 +37,7 @@ function GameScreen({ userNumber }) {
       (direction === "lower" && currentGuess < userNumber) ||
       (direction === "greater" && currentGuess > userNumber)
     ) {
-      Alert.alert("구라치지마", "넌틀렸어", [{ txt: "탈락", style: "cancel" }]);
+      Alert.alert("땡", "틀림ㅋ", [{ text: "탈락", style: "destructive" }]);
 
       return;
     }
