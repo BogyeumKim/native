@@ -6,7 +6,7 @@ import {
   ImageBackground,
   SafeAreaView,
   Platform,
-  StatusBar,
+  
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Colors from "./constants/colors";
@@ -15,6 +15,8 @@ import GameScreen from "./screens/GameScreen";
 import GameOverScreen from "./screens/GameOverScreen";
 import { useFonts } from "expo-font";
 import SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
+
 
 export default function App() {
   const [userNumber, setUserNumber] = useState();
@@ -66,6 +68,8 @@ export default function App() {
   }
 
   return (
+    <>
+    <StatusBar style="light"/>
     <LinearGradient
       colors={[Colors.primary700, Colors.accent500]}
       style={styles.rootScreen}
@@ -80,13 +84,14 @@ export default function App() {
         <SafeAreaView
           style={[
             styles.rootScreen,
-            Platform.OS === "android" && { marginTop: StatusBar.currentHeight },
+            Platform.OS === "android" && { marginTop: 20  },
           ]}
         >
           {screen}
         </SafeAreaView>
       </ImageBackground>
     </LinearGradient>
+    </>
   );
 }
 
