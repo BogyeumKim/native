@@ -27,7 +27,8 @@ export default function App() {
   });
 
   if (!fontsLoaded) {
-    return <SplashScreen />;
+    // return SplashScreen.hideAsync();
+    return null
   }
 
   function pickerNumberHandler(pcikedNumber) {
