@@ -1,10 +1,17 @@
-import { Pressable, StyleSheet, Text, View , Platform } from "react-native";
+import { Pressable, StyleSheet, Text, View, Platform } from "react-native";
 
-function CategoryGridTitle({ title, color }) {
+function CategoryGridTitle({ title, color , onPress }) {
   return (
     <View style={styles.gridItem}>
-      <Pressable android_ripple={{color:'#ccc'}} style={({pressed}) => [styles.button, pressed ? styles.buttonPressed : null,]}>
-        <View style={[styles.innerContainer,{backgroundColor : color}]}>
+      <Pressable
+        android_ripple={{ color: "#ccc" }}
+        style={({ pressed }) => [
+          styles.button,
+          pressed ? styles.buttonPressed : null,
+        ]}
+        onPress={onPress}
+      >
+        <View style={[styles.innerContainer, { backgroundColor: color }]}>
           <Text style={styles.title}>{title}</Text>
         </View>
       </Pressable>
@@ -23,32 +30,32 @@ const styles = StyleSheet.create({
     elevation: 18,
 
     // 위 elevationd은 AOS 아래는 IOS전용
-    shadowColor : 'black',
-    shadowOpacity : 0.25,
-    shadowOffset : {width : 0, height:2},
-    shadowRadius : 8,
-    backgroundColor : 'white',
+    shadowColor: "black",
+    shadowOpacity: 0.25,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+    backgroundColor: "white",
 
-    // 그림자 밖으로나가는거 방지 안드로이드만 
-    overflow : Platform.OS === 'android' ? 'hidden' : 'visible',
+    // 그림자 밖으로나가는거 방지 안드로이드만
+    overflow: Platform.OS === "android" ? "hidden" : "visible",
   },
 
   button: { flex: 1 },
 
-  buttonPressed : {
-    opacity : 0.5,
+  buttonPressed: {
+    opacity: 0.5,
   },
 
   innerContainer: {
     flex: 1,
     padding: 16,
-    borderRadius:8,
+    borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
   },
 
-  title : {
-    fontSize : 18,
-    fontWeight : 'bold',
-  }
+  title: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
 });
