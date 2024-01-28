@@ -13,9 +13,8 @@ function MealsOverviewScreen({ route }) {
   });
 
   function renderMealItem(itemData) {
-    return (
-     <MealItem item={itemData.item} />
-    );
+
+    return <MealItem {...itemData} />;
   }
 
   return (
