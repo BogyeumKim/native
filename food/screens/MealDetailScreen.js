@@ -1,4 +1,5 @@
 import {
+    Button,
   Image,
   ScrollView,
   ScrollViewBase,
@@ -10,10 +11,24 @@ import { MEALS } from "../data/dummy-data";
 import MealDetails from "../components/MealDetails";
 import Subtitle from "../components/MealDetail/Subtitle";
 import List from "../components/MealDetail/List";
-function MealDetailScreen({ route }) {
+import { useLayoutEffect } from "react";
+function MealDetailScreen({ route , navigation }) {
   const mealId = route.params.mealId;
 
   const selectedMeal = MEALS.find((item) => item.id == mealId);
+
+
+  function headerButtonPressHandler(){
+    console.log('pressed!!');
+  }
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+        headerRight: () =>{
+            return <Button title="Tap me" onPress={headerButtonPressHandler} />
+        }
+    })
+  },[navigation,headerButtonPressHandler])
 
   return (
     <ScrollView style={styles.rootContainer}>
