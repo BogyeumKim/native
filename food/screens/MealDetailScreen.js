@@ -1,5 +1,5 @@
 import {
-    Button,
+  Button,
   Image,
   ScrollView,
   ScrollViewBase,
@@ -11,26 +11,48 @@ import { MEALS } from "../data/dummy-data";
 import MealDetails from "../components/MealDetails";
 import Subtitle from "../components/MealDetail/Subtitle";
 import List from "../components/MealDetail/List";
-import { useLayoutEffect } from "react";
+import { useContext, useLayoutEffect } from "react";
 import IconButton from "../components/IconButton";
-function MealDetailScreen({ route , navigation }) {
+import { useDispatch, useSelector } from "react-redux";
+// import { FavoritesContext } from "../store/context/favorites-context";
+import { addFavorite,removeFavorite } from '../store/redux/favorites';
+function MealDetailScreen({ route, navigation }) {
+  // const favoriteMealCtx = useContext(FavoritesContext);
+  const favoriteMealIds = useSelector((state) => state.favoriteMeals.ids);
+  const dispatch = useDispatch();
+
+
   const mealId = route.params.mealId;
 
   const selectedMeal = MEALS.find((item) => item.id == mealId);
 
+  // const mealIsFavorite = favoriteMealCtx.ids.includes(mealId);
+  const mealIsFavorite = favoriteMealIds.includes(mealId);
 
-  function headerButtonPressHandler(){
-    console.log('pressed!!');
+  function changeFavoritesStatusHandler() {
+    if(mealIsFavorite){
+      // favoriteMealCtx.removeFavorite(mealId);
+      dispatch(removeFavorite({id:mealId}));
+    }else{
+      // favoriteMealCtx.addFavorite(mealId);
+      dispatch(addFavorite({id:mealId}));
+    }
   }
 
   useLayoutEffect(() => {
     navigation.setOptions({
-        headerRight: () =>{
-            // return <Button title="Tap me" onPress={headerButtonPressHandler} />
-            return <IconButton onPress={headerButtonPressHandler} icon='star' color='white' />
-        }
-    })
-  },[navigation,headerButtonPressHandler])
+      headerRight: () => {
+        // return <Button title="Tap me" onPress={headerButtonPressHandler} />
+        return (
+          <IconButton
+            onPress={changeFavoritesStatusHandler}
+            icon={mealIsFavorite ? "star" : "star-outline"}
+            color="white"
+          />
+        );
+      },
+    });
+  }, [navigation, changeFavoritesStatusHandler]);
 
   return (
     <ScrollView style={styles.rootContainer}>
