@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import favoritesReudcer from './favorites'
 
-export const sotre = configureStore({
+export const store = configureStore({
     reducer : {
         favoriteMeals : favoritesReudcer
     }
