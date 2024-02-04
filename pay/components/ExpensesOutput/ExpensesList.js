@@ -10,7 +10,7 @@ function ExpensesList({ expenses }) {
     <FlatList
       data={expenses}
       renderItem={renderExpenseItem}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => (item.id ? item.id.toString() : Math.random())}
     />
   );
 }

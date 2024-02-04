@@ -5,60 +5,60 @@ const DUMMY_EXPENSES = [
         id: 'e1',
         description : '신발',
         amount : 59.99,
-        date : new Date('2024-02-01')
+        date : new Date('2024-02-01').toISOString(),
     },
     {
         id: 'e2',
         description : '티셔츠',
         amount : 109.99,
-        date : new Date('2024-01-05')
+        date : new Date('2024-01-05').toISOString(),
     },
     {
         id: 'e3',
         description : '청바지',
         amount : 89.99,
-        date : new Date('2024-01-20')
+        date : new Date('2024-01-20').toISOString(),
     },
     {
         id: 'e4',
         description : '자켓',
         amount : 209.99,
-        date : new Date('2024-02-09')
+        date : new Date('2024-02-09').toISOString(),
     },
     {
         id: 'e5',
         description : '반지',
         amount : 29.99,
-        date : new Date('2024-01-11')
+        date : new Date('2024-01-11').toISOString(),
     }, {
         id: 'e6',
         description : '신발',
         amount : 59.99,
-        date : new Date('2024-02-01')
+        date : new Date('2024-02-01').toISOString(),
     },
     {
         id: 'e7',
         description : '티셔츠',
         amount : 109.99,
-        date : new Date('2024-01-05')
+        date : new Date('2024-01-05').toISOString(),
     },
     {
         id: 'e8',
         description : '청바지',
         amount : 89.99,
-        date : new Date('2024-01-20')
+        date : new Date('2024-01-20').toISOString(),
     },
     {
         id: 'e9',
         description : '자켓',
         amount : 209.99,
-        date : new Date('2024-02-09')
+        date : new Date('2024-02-09').toISOString(),
     },
     {
         id: 'e10',
         description : '반지',
         amount : 29.99,
-        date : new Date('2024-01-11')
+        date : new Date('2024-01-11').toISOString(),
     },
 ];
 
