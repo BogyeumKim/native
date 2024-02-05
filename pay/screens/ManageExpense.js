@@ -12,7 +12,6 @@ import {
 
 function ManageExpense({ route, navigation }) {
   const editedExpenseId = route.params?.expenseId;
-  console.log(editedExpenseId);
   const isEditing = !!editedExpenseId;
 
   const dispatch = useDispatch();
