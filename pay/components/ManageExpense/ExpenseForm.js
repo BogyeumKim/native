@@ -19,7 +19,9 @@ function ExpenseForm() {
         onChangeText : () => {}
       }} />
       <Input label="Description" textInputConfig={{
-        
+        multiline : true,
+        autoCapitalize : 'none' // 대소문자 방지
+        // autoCorrect : false, // default
       }} />
     </View>
   );
