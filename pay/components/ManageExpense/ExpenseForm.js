@@ -19,7 +19,18 @@ function ExpenseForm({submitButtonLabel,onCancel, onSubmit}) {
     });
   }
 
-  function submitHandler(){}
+  function submitHandler(){
+    const expenseData = {
+      amount: +inputValues.amount, // +는 문자열변환
+      date: new Date(inputValues.date).toISOString().split('T')[0],
+      description: inputValues.description,
+    };
+
+    // console.log(expenseData);
+    // console.log(expenseData.date.toISOString().split('T'));
+
+    onSubmit(expenseData);
+  }
 
   return (
     <View style={styles.form}>

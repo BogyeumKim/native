@@ -2,7 +2,6 @@ import { useLayoutEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import IconButton from "../components/UI/IconButton";
 import { GlobalStyles } from "../constants/styles";
-import Button from "../components/UI/Button";
 import { useDispatch } from "react-redux";
 import {
   addExpense,
@@ -32,25 +31,23 @@ function ManageExpense({ route, navigation }) {
     navigation.goBack();
   }
 
-  function confirmHandler() {
+  function confirmHandler(expenseData) {
+    console.log(expenseData);
     if (isEditing) {
       dispatch(
         updateExpense({
           id: editedExpenseId,
-          data: {
-            description: "UPDATE!!",
-            amount: 29.99,
-            date: new Date("2024-02-01").toISOString(),
-          },
+          data: expenseData,
         })
       );
     } else {
       dispatch(
         addExpense({
           id: Math.random().toString(),
-          description: "ADD!!",
-          amount: 19.99,
-          date: new Date("2024-02-04").toISOString(),
+          ...expenseData
+          // description: "ADD!!",
+          // amount: 19.99,
+          // date: new Date("2024-02-04").toISOString(),
         })
       );
     }
@@ -63,6 +60,7 @@ function ManageExpense({ route, navigation }) {
       <ExpenseForm
         submitButtonLabel={isEditing ? "Update" : "Add"}
         onCancel={cancelhandler}
+        onSubmit={confirmHandler}
       />
       {isEditing && (
         <View style={styles.deleteContainer}>
