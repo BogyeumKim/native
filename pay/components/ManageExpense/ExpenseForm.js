@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, Touchable, View } from "react-native";
+import { Alert, StyleSheet, Text, TextInput, Touchable, View } from "react-native";
 import Input from "./Input";
 import { useState } from "react";
 import Button from "../UI/Button";
@@ -6,7 +6,7 @@ import Button from "../UI/Button";
 function ExpenseForm({submitButtonLabel,onCancel, onSubmit,defaultValues}) {
   const [inputValues, setInputValues] = useState({
     amount: defaultValues ? defaultValues.amount.toString() : '',
-    date: defaultValues ? defaultValues.date.toString() : '',
+    date: defaultValues ? defaultValues.date.toISOString() : '',
     description: defaultValues ? defaultValues.description : '',
   });
 
@@ -22,13 +22,19 @@ function ExpenseForm({submitButtonLabel,onCancel, onSubmit,defaultValues}) {
   function submitHandler(){
     const expenseData = {
       amount: +inputValues.amount, // +는 문자열변환
-      date: new Date(inputValues.date).toISOString().split('T')[0],
+      date: new Date(inputValues.date).toString() !== 'Invalid Date' ? new Date(inputValues.date).toISOString().split('T')[0] : inputValues.date,
       description: inputValues.description,
     };
 
-    // console.log(expenseData);
-    // console.log(expenseData.date.toISOString().split('T'));
-
+    const amountIsValid = !isNaN(expenseData.amount) && expenseData.amount > 0;
+    const dateIsValid = expenseData.date.toString() !== 'Invalid Date';
+    const descriptionIsValid = expenseData.description.trim().length > 0;
+    
+    if (!amountIsValid || !dateIsValid || !descriptionIsValid) {
+      Alert.alert("Invalid Input", '벨류 체크하세요')
+      return;
+    }
+    
     onSubmit(expenseData);
   }
 
