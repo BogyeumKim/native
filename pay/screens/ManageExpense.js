@@ -2,7 +2,7 @@ import { useLayoutEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import IconButton from "../components/UI/IconButton";
 import { GlobalStyles } from "../constants/styles";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addExpense,
   deleteExpense,
@@ -15,6 +15,10 @@ function ManageExpense({ route, navigation }) {
   const isEditing = !!editedExpenseId;
 
   const dispatch = useDispatch();
+
+  const selectedExpense = useSelector((state) =>
+    state.expensesReducer.expenses.find((item) => item.id === editedExpenseId)
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -44,7 +48,7 @@ function ManageExpense({ route, navigation }) {
       dispatch(
         addExpense({
           id: Math.random().toString(),
-          ...expenseData
+          ...expenseData,
           // description: "ADD!!",
           // amount: 19.99,
           // date: new Date("2024-02-04").toISOString(),
@@ -61,6 +65,7 @@ function ManageExpense({ route, navigation }) {
         submitButtonLabel={isEditing ? "Update" : "Add"}
         onCancel={cancelhandler}
         onSubmit={confirmHandler}
+        defaultValues={selectedExpense}
       />
       {isEditing && (
         <View style={styles.deleteContainer}>
