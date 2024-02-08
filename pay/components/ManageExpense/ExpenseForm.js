@@ -1,42 +1,76 @@
-import { Alert, StyleSheet, Text, TextInput, Touchable, View } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  Touchable,
+  View,
+} from "react-native";
 import Input from "./Input";
 import { useState } from "react";
 import Button from "../UI/Button";
 
-function ExpenseForm({submitButtonLabel,onCancel, onSubmit,defaultValues}) {
-  const [inputValues, setInputValues] = useState({
-    amount: defaultValues ? defaultValues.amount.toString() : '',
-    date: defaultValues ? defaultValues.date.toISOString() : '',
-    description: defaultValues ? defaultValues.description : '',
+function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
+  const [inputs, setInputs] = useState({
+    amount: {
+      value: defaultValues ? defaultValues.amount.toString() : "",
+      isValid: true,
+    },
+    date: {
+      value: defaultValues ? defaultValues.date : "",
+      isValid: true,
+    },
+    description: {
+      value: defaultValues ? defaultValues.description : "",
+      isValid: true,
+    },
   });
 
   function inputChangedHandler(inputIdentifier, enteredValue) {
-    setInputValues((curInputValues) => {
+    setInputs((curInputs) => {
       return {
-        ...curInputValues,
-        [inputIdentifier]: enteredValue,
+        ...curInputs,
+        [inputIdentifier]: { value: enteredValue, isValid: true },
       };
     });
   }
 
-  function submitHandler(){
+  function submitHandler() {
     const expenseData = {
-      amount: +inputValues.amount, // +는 문자열변환
-      date: new Date(inputValues.date).toString() !== 'Invalid Date' ? new Date(inputValues.date).toISOString().split('T')[0] : inputValues.date,
-      description: inputValues.description,
+      amount: +inputs.amount.value, // +는 문자열변환
+      date:
+        new Date(inputs.date).toString() !== "Invalid Date"
+          ? new Date(inputs.date).toISOString().split("T")[0]
+          : inputs.date.value,
+      description: inputs.description.value,
     };
 
     const amountIsValid = !isNaN(expenseData.amount) && expenseData.amount > 0;
-    const dateIsValid = expenseData.date.toString() !== 'Invalid Date';
+    const dateIsValid = expenseData.date.toString() !== "Invalid Date";
     const descriptionIsValid = expenseData.description.trim().length > 0;
-    
+
     if (!amountIsValid || !dateIsValid || !descriptionIsValid) {
-      Alert.alert("Invalid Input", '벨류 체크하세요')
+      // Alert.alert("Invalid Input", "벨류 체크하세요");
+      setInputs((curInputs) => {
+        return {
+          amount: { value: curInputs.amount.value, isValid: amountIsValid },
+          date: { value: curInputs.date.value, isValid: dateIsValid },
+          description: {
+            value: curInputs.description.value,
+            isValid: descriptionIsValid,
+          },
+        };
+      });
       return;
     }
-    
+
     onSubmit(expenseData);
   }
+
+  const formIsInvalid =
+    !inputs.amount.isValid ||
+    !inputs.date.isValid ||
+    !inputs.description.isValid;
 
   return (
     <View style={styles.form}>
@@ -48,7 +82,7 @@ function ExpenseForm({submitButtonLabel,onCancel, onSubmit,defaultValues}) {
           textInputConfig={{
             keyboardType: "decimal-pad",
             onChangeText: inputChangedHandler.bind(this, "amount"),
-            value: inputValues.amount,
+            value: inputs.amount.value,
           }}
         />
         <Input
@@ -58,7 +92,7 @@ function ExpenseForm({submitButtonLabel,onCancel, onSubmit,defaultValues}) {
             placeholder: "YYYY-MM-DD",
             maxLength: 10,
             onChangeText: inputChangedHandler.bind(this, "date"),
-            value: inputValues.date,
+            value: inputs.date.value,
           }}
         />
       </View>
@@ -70,15 +104,26 @@ function ExpenseForm({submitButtonLabel,onCancel, onSubmit,defaultValues}) {
           autoCapitalize: "none", // 대소문자 방지
           // autoCorrect : false, // default
           onChangeText: inputChangedHandler.bind(this, "description"),
-          value: inputValues.description,
+          value: inputs.description.value,
         }}
       />
 
+      {formIsInvalid && <Text>벨류를 체크하세요</Text>}
+
       <View style={styles.buttons}>
-        <Button style={styles.button} mode="flat" onPress={onCancel} title="Cancel">
+        <Button
+          style={styles.button}
+          mode="flat"
+          onPress={onCancel}
+          title="Cancel"
+        >
           Cancel
         </Button>
-        <Button style={styles.button} onPress={submitHandler} title={submitButtonLabel}>
+        <Button
+          style={styles.button}
+          onPress={submitHandler}
+          title={submitButtonLabel}
+        >
           {submitButtonLabel}
         </Button>
       </View>
