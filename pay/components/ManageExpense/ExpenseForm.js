@@ -9,8 +9,10 @@ import {
 import Input from "./Input";
 import { useState } from "react";
 import Button from "../UI/Button";
+import { GlobalStyles } from "../../constants/styles";
 
 function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
+
   const [inputs, setInputs] = useState({
     amount: {
       value: defaultValues ? defaultValues.amount.toString() : "",
@@ -38,17 +40,14 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
   function submitHandler() {
     const expenseData = {
       amount: +inputs.amount.value, // +는 문자열변환
-      date:
-        new Date(inputs.date).toString() !== "Invalid Date"
-          ? new Date(inputs.date).toISOString().split("T")[0]
-          : inputs.date.value,
+      date: inputs.date.value,
       description: inputs.description.value,
     };
 
     const amountIsValid = !isNaN(expenseData.amount) && expenseData.amount > 0;
-    const dateIsValid = expenseData.date.toString() !== "Invalid Date";
+    const dateIsValid =  !isNaN(new Date(expenseData.date));
     const descriptionIsValid = expenseData.description.trim().length > 0;
-
+    console.log(dateIsValid);
     if (!amountIsValid || !dateIsValid || !descriptionIsValid) {
       // Alert.alert("Invalid Input", "벨류 체크하세요");
       setInputs((curInputs) => {
@@ -63,7 +62,7 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
       });
       return;
     }
-
+    
     onSubmit(expenseData);
   }
 
@@ -79,6 +78,7 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
         <Input
           style={styles.rowInput}
           label="Amount"
+          invalid={!inputs.amount.isValid}
           textInputConfig={{
             keyboardType: "decimal-pad",
             onChangeText: inputChangedHandler.bind(this, "amount"),
@@ -88,6 +88,7 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
         <Input
           style={styles.rowInput}
           label="Date"
+          invalid={!inputs.date.isValid}
           textInputConfig={{
             placeholder: "YYYY-MM-DD",
             maxLength: 10,
@@ -99,6 +100,7 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
 
       <Input
         label="Description"
+        invalid={!inputs.description.isValid}
         textInputConfig={{
           multiline: true,
           autoCapitalize: "none", // 대소문자 방지
@@ -108,7 +110,7 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
         }}
       />
 
-      {formIsInvalid && <Text>벨류를 체크하세요</Text>}
+      {formIsInvalid && <Text style={styles.errorText}>벨류를 체크하세요</Text>}
 
       <View style={styles.buttons}>
         <Button
@@ -159,5 +161,10 @@ const styles = StyleSheet.create({
   button: {
     minWidth: 120,
     marginHorizontal: 8,
+  },
+  errorText: {
+    textAlign: "center",
+    color: GlobalStyles.colors.error500,
+    margin: 8,
   },
 });
