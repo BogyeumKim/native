@@ -9,6 +9,7 @@ import {
   updateExpense,
 } from "../store/slice/expensesSlice";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
+import { storeExpense } from "../util/http";
 
 function ManageExpense({ route, navigation }) {
   const editedExpenseId = route.params?.expenseId;
@@ -45,6 +46,7 @@ function ManageExpense({ route, navigation }) {
         })
       );
     } else {
+      storeExpense(expenseData);
       dispatch(
         addExpense({
           id: Math.random().toString(),
