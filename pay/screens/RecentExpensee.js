@@ -2,9 +2,19 @@ import { Text } from "react-native";
 import ExpensesOutput from "../components/ExpensesOutput";
 import { useSelector } from "react-redux";
 import { getDateMinusDay } from "../util/date";
+import { useEffect } from "react";
+import { fetchExpenses } from "../util/http";
 
 function RecentExpensee() {
   const expenses = useSelector((state) => state.expensesReducer.expenses);
+
+  useEffect(() => {
+    async function getExpenses () {
+      const expenses = await fetchExpenses();
+    }
+    
+    getExpenses();
+  },[]);
 
   const recnetRexpenses = expenses.filter((item) => {
     const today = new Date();
