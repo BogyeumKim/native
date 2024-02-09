@@ -37,7 +37,7 @@ function ManageExpense({ route, navigation }) {
   }
 
   function confirmHandler(expenseData) {
-    console.log(expenseData);
+    
     if (isEditing) {
       dispatch(
         updateExpense({

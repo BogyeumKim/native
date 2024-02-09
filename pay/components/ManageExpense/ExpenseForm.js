@@ -47,7 +47,7 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
     const amountIsValid = !isNaN(expenseData.amount) && expenseData.amount > 0;
     const dateIsValid =  !isNaN(new Date(expenseData.date));
     const descriptionIsValid = expenseData.description.trim().length > 0;
-    console.log(dateIsValid);
+    
     if (!amountIsValid || !dateIsValid || !descriptionIsValid) {
       // Alert.alert("Invalid Input", "벨류 체크하세요");
       setInputs((curInputs) => {
