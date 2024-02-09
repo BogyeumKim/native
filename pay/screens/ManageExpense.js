@@ -2,13 +2,18 @@ import { useLayoutEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import IconButton from "../components/UI/IconButton";
 import { GlobalStyles } from "../constants/styles";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addExpense,
   deleteExpense,
   updateExpense,
 } from "../store/slice/expensesSlice";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
+import {
+  storeExpense,
+  updateExpensesFetch,
+  deleteExpenseFetch,
+} from "../util/http";
 
 function ManageExpense({ route, navigation }) {
   const editedExpenseId = route.params?.expenseId;
@@ -16,13 +21,18 @@ function ManageExpense({ route, navigation }) {
 
   const dispatch = useDispatch();
 
+  const selectedExpense = useSelector((state) =>
+    state.expensesReducer.expenses.find((item) => item.id === editedExpenseId)
+  );
+
   useLayoutEffect(() => {
     navigation.setOptions({
       title: isEditing ? "Edit Expense" : "Add Expense",
     });
   }, [navigation, isEditing]);
 
-  function deleteExpenseHandler() {
+  async function deleteExpenseHandler() {
+    await deleteExpenseFetch(editedExpenseId);
     dispatch(deleteExpense(editedExpenseId));
     navigation.goBack();
   }
@@ -31,8 +41,7 @@ function ManageExpense({ route, navigation }) {
     navigation.goBack();
   }
 
-  function confirmHandler(expenseData) {
-    console.log(expenseData);
+  async function confirmHandler(expenseData) {
     if (isEditing) {
       dispatch(
         updateExpense({
@@ -40,11 +49,14 @@ function ManageExpense({ route, navigation }) {
           data: expenseData,
         })
       );
+
+      updateExpensesFetch(editedExpenseId, expenseData);
     } else {
+      const id = await storeExpense(expenseData);
       dispatch(
         addExpense({
-          id: Math.random().toString(),
-          ...expenseData
+          id: id,
+          ...expenseData,
           // description: "ADD!!",
           // amount: 19.99,
           // date: new Date("2024-02-04").toISOString(),
@@ -61,6 +73,7 @@ function ManageExpense({ route, navigation }) {
         submitButtonLabel={isEditing ? "Update" : "Add"}
         onCancel={cancelhandler}
         onSubmit={confirmHandler}
+        defaultValues={selectedExpense}
       />
       {isEditing && (
         <View style={styles.deleteContainer}>

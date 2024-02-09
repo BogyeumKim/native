@@ -2,7 +2,7 @@ export function getFormattedDate(date) {
     if (typeof date === 'string') {
         date = new Date(date);
       }
-    return `${date.getFullYear()}-${date.getMonth() +1}-${date.getDate()}`;
+    return date.toISOString().slice(0,10);
 }
 
 export function getDateMinusDay(date, days) {
