@@ -9,7 +9,11 @@ import {
   updateExpense,
 } from "../store/slice/expensesSlice";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
-import { storeExpense } from "../util/http";
+import {
+  storeExpense,
+  updateExpensesFetch,
+  deleteExpenseFetch,
+} from "../util/http";
 
 function ManageExpense({ route, navigation }) {
   const editedExpenseId = route.params?.expenseId;
@@ -27,7 +31,8 @@ function ManageExpense({ route, navigation }) {
     });
   }, [navigation, isEditing]);
 
-  function deleteExpenseHandler() {
+  async function deleteExpenseHandler() {
+    await deleteExpenseFetch(editedExpenseId);
     dispatch(deleteExpense(editedExpenseId));
     navigation.goBack();
   }
@@ -37,7 +42,6 @@ function ManageExpense({ route, navigation }) {
   }
 
   async function confirmHandler(expenseData) {
-    
     if (isEditing) {
       dispatch(
         updateExpense({
@@ -45,6 +49,8 @@ function ManageExpense({ route, navigation }) {
           data: expenseData,
         })
       );
+
+      updateExpensesFetch(editedExpenseId, expenseData);
     } else {
       const id = await storeExpense(expenseData);
       dispatch(
