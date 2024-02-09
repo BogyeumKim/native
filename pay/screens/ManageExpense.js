@@ -36,7 +36,7 @@ function ManageExpense({ route, navigation }) {
     navigation.goBack();
   }
 
-  function confirmHandler(expenseData) {
+  async function confirmHandler(expenseData) {
     
     if (isEditing) {
       dispatch(
@@ -46,10 +46,10 @@ function ManageExpense({ route, navigation }) {
         })
       );
     } else {
-      storeExpense(expenseData);
+      const id = await storeExpense(expenseData);
       dispatch(
         addExpense({
-          id: Math.random().toString(),
+          id: id,
           ...expenseData,
           // description: "ADD!!",
           // amount: 19.99,
