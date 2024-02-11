@@ -1,4 +1,4 @@
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import IconButton from "../components/UI/IconButton";
 import { GlobalStyles } from "../constants/styles";
@@ -14,8 +14,10 @@ import {
   updateExpensesFetch,
   deleteExpenseFetch,
 } from "../util/http";
+import LoadingOverlay from "../components/UI/LoadingOverlay";
 
 function ManageExpense({ route, navigation }) {
+  const [isSubmitting , setIsSubmitting] = useState(false);
   const editedExpenseId = route.params?.expenseId;
   const isEditing = !!editedExpenseId;
 
@@ -32,6 +34,7 @@ function ManageExpense({ route, navigation }) {
   }, [navigation, isEditing]);
 
   async function deleteExpenseHandler() {
+    setIsSubmitting(true);
     await deleteExpenseFetch(editedExpenseId);
     dispatch(deleteExpense(editedExpenseId));
     navigation.goBack();
@@ -42,6 +45,7 @@ function ManageExpense({ route, navigation }) {
   }
 
   async function confirmHandler(expenseData) {
+    setIsSubmitting(true);
     if (isEditing) {
       dispatch(
         updateExpense({
@@ -57,14 +61,15 @@ function ManageExpense({ route, navigation }) {
         addExpense({
           id: id,
           ...expenseData,
-          // description: "ADD!!",
-          // amount: 19.99,
-          // date: new Date("2024-02-04").toISOString(),
         })
       );
     }
 
     navigation.goBack();
+  }
+
+  if(isSubmitting){
+    return <LoadingOverlay />
   }
 
   return (
