@@ -6,9 +6,11 @@ import { useEffect, useState } from "react";
 import { fetchExpenses } from "../util/http";
 import { setExpenses } from "../store/slice/expensesSlice";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
 
 function RecentExpensee() {
   const [isFetching, setIsFetching] = useState(true);
+  const [error, setError] = useState();
 
   const expenses = useSelector((state) => state.expensesReducer.expenses);
   const dispatch = useDispatch();
@@ -16,16 +18,29 @@ function RecentExpensee() {
   useEffect(() => {
     async function getExpenses() {
       setIsFetching(true);
-      const expensesFetch = await fetchExpenses();
+      try {
+        const expensesFetch = await fetchExpenses();
+        dispatch(setExpenses(expensesFetch));
+      } catch (error) {
+        setError("FETFCH 실패!!");
+      }
       setIsFetching(false);
-      dispatch(setExpenses(expensesFetch));
     }
 
     getExpenses();
   }, []);
 
-  if(isFetching) {
-    return <LoadingOverlay />
+
+  function errorHandler() {
+    setError(null);
+  }
+
+  if(error && !isFetching) {
+    return <ErrorOverlay message={error} onConfirm={errorHandler}/>
+  }
+
+  if (isFetching) {
+    return <LoadingOverlay />;
   }
 
   const recnetRexpenses = expenses.filter((item) => {
