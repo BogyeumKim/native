@@ -1,4 +1,4 @@
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import IconButton from "../components/UI/IconButton";
 import { GlobalStyles } from "../constants/styles";
@@ -14,8 +14,13 @@ import {
   updateExpensesFetch,
   deleteExpenseFetch,
 } from "../util/http";
+import LoadingOverlay from "../components/UI/LoadingOverlay";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
 
 function ManageExpense({ route, navigation }) {
+  const [isSubmitting , setIsSubmitting] = useState(false);
+  const [error, setError] = useState();
+
   const editedExpenseId = route.params?.expenseId;
   const isEditing = !!editedExpenseId;
 
@@ -32,8 +37,14 @@ function ManageExpense({ route, navigation }) {
   }, [navigation, isEditing]);
 
   async function deleteExpenseHandler() {
-    await deleteExpenseFetch(editedExpenseId);
-    dispatch(deleteExpense(editedExpenseId));
+    try{
+      await deleteExpenseFetch(editedExpenseId);
+      dispatch(deleteExpense(editedExpenseId));
+    }catch(error){
+      setError(' 다시 시도하세요 삭제 실패함');
+      setIsSubmitting(true);
+    }
+    
     navigation.goBack();
   }
 
@@ -42,29 +53,42 @@ function ManageExpense({ route, navigation }) {
   }
 
   async function confirmHandler(expenseData) {
-    if (isEditing) {
-      dispatch(
-        updateExpense({
-          id: editedExpenseId,
-          data: expenseData,
-        })
-      );
+    setIsSubmitting(true);
+    try{
+      if (isEditing) {
+        dispatch(
+          updateExpense({
+            id: editedExpenseId,
+            data: expenseData,
+          })
+        );
+  
+        updateExpensesFetch(editedExpenseId, expenseData);
+      } else {
+        const id = await storeExpense(expenseData);
+        dispatch(
+          addExpense({
+            id: id,
+            ...expenseData,
+          })
+        );
+      }
+      navigation.goBack();
 
-      updateExpensesFetch(editedExpenseId, expenseData);
-    } else {
-      const id = await storeExpense(expenseData);
-      dispatch(
-        addExpense({
-          id: id,
-          ...expenseData,
-          // description: "ADD!!",
-          // amount: 19.99,
-          // date: new Date("2024-02-04").toISOString(),
-        })
-      );
+    } catch(error) {
+        setError(' submit에 실패하였음');
+        setIsSubmitting(false);
     }
 
-    navigation.goBack();
+  }
+
+
+  if(error && !isSubmitting) {
+    return <ErrorOverlay message={error} />
+  }
+
+  if(isSubmitting){
+    return <LoadingOverlay />
   }
 
   return (
