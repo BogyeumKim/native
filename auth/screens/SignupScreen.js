@@ -19,8 +19,8 @@ function SignupScreen() {
       authDispatch(authenticateLogin(token));
     }catch(e){
         Alert.alert('인증 실패!', '사용자 생성에 실패하였습니다.');
+        setIsAuthenticating(false);
     }
-    setIsAuthenticating(false);
   }
 
   if(isAuthenticationg) {
