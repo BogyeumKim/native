@@ -8,8 +8,11 @@ import WelcomeScreen from "./screens/WelcomeScreen";
 import { Colors } from "./constants/styles";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { AuthStore } from "./store/auth-store";
-import IconButton from './components/ui/IconButton'
-import { logout } from "./store/authSlice";
+import IconButton from "./components/ui/IconButton";
+import { authenticateLogin, logout } from "./store/authSlice";
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const Stack = createNativeStackNavigator();
 
 function AuthStack() {
@@ -37,23 +40,65 @@ function AuthenticatedStack() {
         contentStyle: { backgroundColor: Colors.primary100 },
       }}
     >
-      <Stack.Screen name="Welcome" component={WelcomeScreen} options={{
-        headerRight : ({tintColor}) => <IconButton icon="exit" color={tintColor} size={34} onPress={() => dispatch(logout())}/>
-      }} />
+      <Stack.Screen
+        name="Welcome"
+        component={WelcomeScreen}
+        options={{
+          headerRight: ({ tintColor }) => (
+            <IconButton
+              icon="exit"
+              color={tintColor}
+              size={34}
+              onPress={() => dispatch(logout())}
+            />
+          ),
+        }}
+      />
     </Stack.Navigator>
   );
 }
 
 function Navigation() {
-  const authToken = useSelector(state => state.authReducer);
-  
+  const {isAuthenticated} = useSelector((state) => state.authReducer);
 
   return (
     <NavigationContainer>
-      {!authToken.isAuthenticated && <AuthStack />}
-      {authToken.isAuthenticated && <AuthenticatedStack />}
+      {!isAuthenticated && <AuthStack />}
+      {isAuthenticated && <AuthenticatedStack />}
     </NavigationContainer>
   );
+}
+
+ function Root() {
+   const dispatch = useDispatch();
+  const [isTryingLogin, setIsTryingLogin] = useState(true);
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        if (token) {
+          dispatch(authenticateLogin(token));
+        }
+      } catch (error) {
+        console.error("Error fetching token from AsyncStorage:", error);
+      } finally {
+        setIsTryingLogin(false);
+      }
+    };
+    
+    fetchToken();
+  }, []);
+
+  if(isTryingLogin){
+    return;
+  }
+
+  return (
+    <>
+     <Navigation />
+    </>
+  )
 }
 
 export default function App() {
@@ -61,7 +106,7 @@ export default function App() {
     <>
       <StatusBar style="light" />
       <Provider store={AuthStore}>
-        <Navigation />
+        <Root />
       </Provider>
     </>
   );
