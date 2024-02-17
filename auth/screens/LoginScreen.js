@@ -15,7 +15,6 @@ function LoginScreen() {
     try {
       setIsAuthenticating(true);
       const token = await login(email, password);
-      console.log('token ::' , token);
       authDispatch(authenticateLogin(token));
     } catch (e) {
       Alert.alert('인증 실패','로그인 실패');
