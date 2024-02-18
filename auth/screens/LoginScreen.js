@@ -10,20 +10,18 @@ function LoginScreen() {
   const [isAuthenticationg, setIsAuthenticating] = useState(false);
 
   const authDispatch = useDispatch();
-  const test = useSelector(state => state.authReducer.token);
 
-  
   async function loginHandler({ email, password }) {
     try {
       setIsAuthenticating(true);
       const token = await login(email, password);
       authDispatch(authenticateLogin(token));
-      console.log(test);
     } catch (e) {
       Alert.alert('인증 실패','로그인 실패');
+      setIsAuthenticating(false);
     }
 
-    setIsAuthenticating(false);
+    
   }
 
   if (isAuthenticationg) {
