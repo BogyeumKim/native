@@ -25,6 +25,14 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "권한 설정해라 안하면 못함 ㅅㄱ"
+        }
+      ]
+    ]
   }
 }
