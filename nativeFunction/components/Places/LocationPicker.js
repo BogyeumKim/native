@@ -6,17 +6,33 @@ import {
   getCurrentPositionAsync,
   useForegroundPermissions,
 } from "expo-location";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getMapPreview } from "../../util/location";
-import { useNavigation } from "@react-navigation/native";
+import {
+  useNavigation,
+  useRoute,
+  useIsFocused,
+} from "@react-navigation/native";
 
 function LocationPicker() {
   const [pickedLocation, setPickedLocation] = useState();
+  const isFocused = useIsFocused();
 
   const navigation = useNavigation();
+  const route = useRoute();
 
   const [locationPermissionInformation, requestPermission] =
     useForegroundPermissions();
+
+  useEffect(() => {
+    if (isFocused && route.params) {
+      const mapPickedLocation = {
+        lat: route.params.pickedLat,
+        lng: route.params.pickedLng,
+      };
+      setPickedLocation(mapPickedLocation);
+    }
+  }, [route, isFocused]);
 
   async function verifyPermissions() {
     if (
@@ -46,10 +62,10 @@ function LocationPicker() {
     const location = await getCurrentPositionAsync(); // 주석이유로는 안드로이드 에뮬레이터에서는 current postion 얻어올수없어 계속기다림
 
     setPickedLocation({
-      // lat: location.coords.latitude,
-      // lng: location.coords.longitude,
-      lat: "37.55719830000000",
-      lng: "127.19840589999997",
+      lat: location.coords.latitude,
+      lng: location.coords.longitude,
+      // lat: "37.55719830000000",
+      // lng: "127.19840589999997",
     });
   }
 
