@@ -26,6 +26,7 @@ function LocationPicker() {
 
     if (locationPermissionInformation.status === PermissionStatus.DENIED) {
       Alert.alert("권한없음!", "위치 권한 허용하셈");
+
       return false;
     }
 
@@ -34,14 +35,18 @@ function LocationPicker() {
 
   async function getLocationHandler() {
     const hasPermission = await verifyPermissions();
-
+    console.log(hasPermission);
     if (!hasPermission) {
       return;
     }
-    const location = await getCurrentPositionAsync();
+
+    const location = await getCurrentPositionAsync(); // 주석이유로는 안드로이드 에뮬레이터에서는 current postion 얻어올수없어 계속기다림
+
     setPickedLocation({
-      lat: location.coords.latitude,
-      lng: location.coords.longitude,
+      // lat: location.coords.latitude,
+      // lng: location.coords.longitude,
+      lat: "37.55719830000000",
+      lng: "127.19840589999997",
     });
   }
 
@@ -54,7 +59,7 @@ function LocationPicker() {
       <Image
         style={styles.image}
         source={{ uri: getMapPreview(pickedLocation.lat, pickedLocation.lng) }}
-      /> 
+      />
     );
   }
 
@@ -84,7 +89,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Colors.primary100,
     borderRadius: 4,
-    overflow:'hidden'
+    overflow: "hidden",
   },
   actions: {
     flexDirection: "row",
