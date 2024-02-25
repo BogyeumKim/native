@@ -4,8 +4,9 @@ import { Colors } from "../../constants/colors";
 import ImagePicker from "./ImagePicker";
 import LocationPicker from "./LocationPicker";
 import Button from "../UI/Button";
+import { Place } from "../../models/place";
 
-function PlaceForm({onCreatePlace}) {
+function PlaceForm({ onCreatePlace }) {
   const [enteredTitle, setEnteredTitle] = useState("");
   const [selectedImage, setSelectedImage] = useState();
   const [pickedLocation, setPickedLocation] = useState();
@@ -14,13 +15,13 @@ function PlaceForm({onCreatePlace}) {
     setEnteredTitle(enteredText);
   }
 
-  const  takeImageHanlder =useCallback((imageUri) =>{
+  const takeImageHanlder = useCallback((imageUri) => {
     setSelectedImage(imageUri);
-  },[]);
+  }, []);
 
-  const pickLocationHandler = useCallback((location) =>{
+  const pickLocationHandler = useCallback((location) => {
     setPickedLocation(location);
-  },[]);
+  }, []);
 
   function savePlaceHandler() {
     const placeData = new Place(enteredTitle, selectedImage, pickedLocation);
