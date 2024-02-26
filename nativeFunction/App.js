@@ -7,7 +7,7 @@ import IconButton from "./components/UI/IconButton";
 import { Colors } from "./constants/colors";
 import Map from "./screens/Map";
 import { useCallback, useEffect, useState } from "react";
-import { init } from "./util/database";
+import { deletePlace, init } from "./util/database";
 import * as SplashScreen from "expo-splash-screen";
 import { View } from "react-native";
 
