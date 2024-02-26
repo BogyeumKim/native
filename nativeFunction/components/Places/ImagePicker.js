@@ -6,7 +6,8 @@ import {
 } from "expo-image-picker";
 import { useState } from "react";
 import { Colors } from "../../constants/colors";
-function ImagePicker() {
+import OutlinedButton from "../UI/OutlinedButton";
+function ImagePicker({ onTakeImage }) {
   const [pickedImage, setPickedImage] = useState();
 
   const [cameraPermissionInformation, requestPermission] =
@@ -41,6 +42,7 @@ function ImagePicker() {
     });
 
     setPickedImage(image.assets[0].uri);
+    onTakeImage(image.assets[0].uri);
   }
 
   let imagePreview = <Text>이미지가 없음</Text>;
@@ -52,7 +54,9 @@ function ImagePicker() {
   return (
     <View>
       <View style={styles.imagePreview}>{imagePreview}</View>
-      <Button title="Take Image" onPress={takeImageHandler} />
+      <OutlinedButton onPress={takeImageHandler} icon="camera">
+        Take Image
+      </OutlinedButton>
     </View>
   );
 }
@@ -60,18 +64,19 @@ function ImagePicker() {
 export default ImagePicker;
 
 const styles = StyleSheet.create({
-  imagePreview : {
-    width:'100%',
-    height : 200,
-    marginVertical : 8,
-    justifyContent : 'center',
-    alignItems : 'center',
-    backgroundColor : Colors.primary100,
-    borderRadius:4
+  imagePreview: {
+    width: "100%",
+    height: 200,
+    marginVertical: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.primary100,
+    borderRadius: 4,
+    overflow: "hidden",
   },
 
-  image : {
-    width:'100%',
-    height:'100%'
-  }
-})
+  image: {
+    width: "100%",
+    height: "100%",
+  },
+});
