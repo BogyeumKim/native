@@ -21,7 +21,12 @@ function PlaceDetails({ route, navigation }) {
     loadPlaceData();
   }, [selectedPlaceId]);
 
-  function showOnMapHanlder() {}
+  function showOnMapHanlder() {
+    navigation.navigate('Map', {
+        initialLat : fetchedPlace.location.lat,
+        initialLng : fetchedPlace.location.lng,
+    });
+  }
 
   if (!fetchedPlace) {
     return (
