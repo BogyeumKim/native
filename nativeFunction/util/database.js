@@ -67,11 +67,16 @@ export function fetchplaces() {
 
           for (const dp of result.rows._array) {
             places.push(
-              new Place(dp.title, dp.imageUri, {
-                address: dp.address,
-                lat: dp.lat,
-                lng: dp.lng,
-              },dp.id)
+              new Place(
+                dp.title,
+                dp.imageUri,
+                {
+                  address: dp.address,
+                  lat: dp.lat,
+                  lng: dp.lng,
+                },
+                dp.id
+              )
             );
           }
           // console.log(JSON.stringify(result, null, 2));
@@ -87,16 +92,41 @@ export function fetchplaces() {
   return promise;
 }
 
-
-export function deletePlace(){
+export function deletePlace() {
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
         "DELETE FROM places",
         [],
         (_, result) => {
-       
           resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export function fetchPlaceDetails(id) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        "SELECT * FROM places WHERE id = ?",
+        [id],
+        (_, result) => {
+          // console.log(JSON.stringify(result, null, 2));
+          const dbPlace = result.rows._array[0];
+          const place = new Place(
+            dbPlace.title,
+            dbPlace.imageUri,
+            { lat: dbPlace.lat, lng: dbPlace.lng, address: dbPlace.address },
+            dbPlace.id
+          );
+          resolve(place);
         },
         (_, error) => {
           reject(error);
