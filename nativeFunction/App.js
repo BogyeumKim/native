@@ -9,8 +9,15 @@ import Map from "./screens/Map";
 import { useCallback, useEffect, useState } from "react";
 import { deletePlace, init } from "./util/database";
 import * as SplashScreen from "expo-splash-screen";
-import { View } from "react-native";
+import {
+  Button,
+  SafeAreaView,
+  SafeAreaViewComponent,
+  Text,
+  View,
+} from "react-native";
 import PlaceDetails from "./screens/PlaceDetails";
+import * as Notifications from "expo-notifications";
 
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -44,10 +51,32 @@ export default function App() {
     return null;
   }
 
+  function scheduleNotificationHandler() {
+    Notifications.scheduleNotificationAsync({
+      content: {
+        title: "로컬 알림임",
+        body: "본문임ㅋ",
+        data: { useName: "Max" },
+      },
+      trigger: {
+        seconds: 5,
+      },
+    });
+  }
+
   return (
     <>
-      <StatusBar style="dark" />
-      <NavigationContainer>
+      <SafeAreaView
+        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      >
+        <Button
+          title="Schedule Notification"
+          onPress={scheduleNotificationHandler}
+        />
+      </SafeAreaView>
+
+      {/* <StatusBar style="dark" /> */}
+      {/* <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
             headerStyle: { backgroundColor: Colors.primary500 },
@@ -82,7 +111,7 @@ export default function App() {
             title:'Loading Place...',
           }} />
         </Stack.Navigator>
-      </NavigationContainer>
+      </NavigationContainer> */}
     </>
   );
 }
