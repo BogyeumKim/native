@@ -51,6 +51,20 @@ export default function App() {
     initializeApp();
   }, []);
 
+  useEffect(() => {
+    const subscription = Notifications.addNotificationReceivedListener( ( notification ) => {
+        console.log('NOTIFICATION RECEIVED');
+        console.log(JSON.stringify(notification,null,2));
+        const userName = notification.request.content.data.userName;
+        console.log(userName);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+    
+  },[])
+
   // const onLayoutRootView = useCallback(async () => {
   //   if (!dbInitialized) {
   //     await SplashScreen.hideAsync();
@@ -66,7 +80,7 @@ export default function App() {
       content: {
         title: "로컬 알림임",
         body: "본문임ㅋ",
-        data: { useName: "Max" },
+        data: { userName: "Max" },
       },
       trigger: {
         seconds: 5,
