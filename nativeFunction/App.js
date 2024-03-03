@@ -16,7 +16,7 @@ import {
   SafeAreaViewComponent,
   Text,
   View,
-  Platform
+  Platform,
 } from "react-native";
 import PlaceDetails from "./screens/PlaceDetails";
 import * as Notifications from "expo-notifications";
@@ -54,55 +54,56 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const subscription = Notifications.addNotificationReceivedListener( ( notification ) => {
-        console.log('NOTIFICATION RECEIVED');
+    const subscription = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        console.log("NOTIFICATION RECEIVED");
         // console.log(JSON.stringify(notification,null,2));
         const userName = notification.request.content.data.userName;
         console.log(userName);
-    });
+      }
+    );
 
-    const subscription2 = Notifications.addNotificationResponseReceivedListener((response) => {
-      console.log('NOTIFICATION RESPONSE');
-      console.log(response);
-    });
+    const subscription2 = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        console.log("NOTIFICATION RESPONSE");
+        console.log(response);
+      }
+    );
 
     return () => {
       subscription.remove();
       subscription2.remove();
     };
-    
-  },[])
+  }, []);
 
   useEffect(() => {
-
     async function configurePushNotifications() {
-      const {status} = await Notifications.getPermissionsAsync();
+      const { status } = await Notifications.getPermissionsAsync();
       let finalStatus = status;
 
-      if(finalStatus !== 'granted') {
-        const {status } = await Notifications.requestPermissionsAsync();
+      if (finalStatus !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
         finalStatus = status;
       }
 
-      if(finalStatus !== 'granted') {
-        Alert.alert('알림','권한설정하셈');
+      if (finalStatus !== "granted") {
+        Alert.alert("알림", "권한설정하셈");
         return;
       }
 
       const pushTokendData = await Notifications.getExpoPushTokenAsync();
       console.log(pushTokendData);
 
-      if(Platform.OS === 'android') {
-        Notifications.setNotificationChannelAsync('default',{
-          name : 'default',
-          importance : Notifications.AndroidImportance.HIGH
+      if (Platform.OS === "android") {
+        Notifications.setNotificationChannelAsync("default", {
+          name: "default",
+          importance: Notifications.AndroidImportance.HIGH,
         });
       }
-
     }
 
     configurePushNotifications();
-  },[])
+  }, []);
 
   // const onLayoutRootView = useCallback(async () => {
   //   if (!dbInitialized) {
@@ -127,6 +128,21 @@ export default function App() {
     });
   }
 
+  function sendPushNotificationHandler() {
+    fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        // to: "ExponentPushToken[Z6ljz4Fs9XzZcPC65QnufM]",
+        to: "ExponentPushToken[HsKJerMMLAEcab5srxz2hT]",
+        title: "테스트임",
+        body: "ㄹㅇㅋㅋ",
+      }),
+    });
+  }
+
   return (
     <>
       <SafeAreaView
@@ -136,6 +152,7 @@ export default function App() {
           title="Schedule Notification"
           onPress={scheduleNotificationHandler}
         />
+        <Button title="PUSH버튼임" onPress={sendPushNotificationHandler} />
       </SafeAreaView>
 
       {/* <StatusBar style="dark" /> */}
