@@ -10,11 +10,13 @@ import { useCallback, useEffect, useState } from "react";
 import { deletePlace, init } from "./util/database";
 import * as SplashScreen from "expo-splash-screen";
 import {
+  Alert,
   Button,
   SafeAreaView,
   SafeAreaViewComponent,
   Text,
   View,
+  Platform
 } from "react-native";
 import PlaceDetails from "./screens/PlaceDetails";
 import * as Notifications from "expo-notifications";
@@ -72,9 +74,34 @@ export default function App() {
   },[])
 
   useEffect(() => {
-    Notifications.getExpoPushTokenAsync().then(pushTokenData => {
-      console.log(pushToken);
-    });
+
+    async function configurePushNotifications() {
+      const {status} = await Notifications.getPermissionsAsync();
+      let finalStatus = status;
+
+      if(finalStatus !== 'granted') {
+        const {status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+
+      if(finalStatus !== 'granted') {
+        Alert.alert('알림','권한설정하셈');
+        return;
+      }
+
+      const pushTokendData = await Notifications.getExpoPushTokenAsync();
+      console.log(pushTokendData);
+
+      if(Platform.OS === 'android') {
+        Notifications.setNotificationChannelAsync('default',{
+          name : 'default',
+          importance : Notifications.AndroidImportance.HIGH
+        });
+      }
+
+    }
+
+    configurePushNotifications();
   },[])
 
   // const onLayoutRootView = useCallback(async () => {
