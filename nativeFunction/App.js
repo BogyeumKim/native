@@ -54,13 +54,19 @@ export default function App() {
   useEffect(() => {
     const subscription = Notifications.addNotificationReceivedListener( ( notification ) => {
         console.log('NOTIFICATION RECEIVED');
-        console.log(JSON.stringify(notification,null,2));
+        // console.log(JSON.stringify(notification,null,2));
         const userName = notification.request.content.data.userName;
         console.log(userName);
     });
 
+    const subscription2 = Notifications.addNotificationResponseReceivedListener((response) => {
+      console.log('NOTIFICATION RESPONSE');
+      console.log(response);
+    });
+
     return () => {
       subscription.remove();
+      subscription2.remove();
     };
     
   },[])
