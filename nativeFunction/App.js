@@ -19,6 +19,16 @@ import {
 import PlaceDetails from "./screens/PlaceDetails";
 import * as Notifications from "expo-notifications";
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+      shouldShowAlert: true,
+    };
+  },
+});
+
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
 
