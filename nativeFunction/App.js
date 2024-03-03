@@ -71,6 +71,12 @@ export default function App() {
     
   },[])
 
+  useEffect(() => {
+    Notifications.getExpoPushTokenAsync().then(pushTokenData => {
+      console.log(pushToken);
+    });
+  },[])
+
   // const onLayoutRootView = useCallback(async () => {
   //   if (!dbInitialized) {
   //     await SplashScreen.hideAsync();
