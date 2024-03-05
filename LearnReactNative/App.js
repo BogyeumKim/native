@@ -1,12 +1,18 @@
 import React from 'react';
-import {SafeAreaView, View, Text} from 'react-native';
-import Greeting from './components/Greeting';
+import {View, Text} from 'react-native';
+import DateHead from './components/DateHead';
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 
 const App = () => {
+  const today = new Date();
+
+  const name = 'JSX';
   return (
-    <SafeAreaView>
-      <Greeting name="Test" />
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <SafeAreaView edges={['bottom']}>
+        <DateHead date={today} />
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 
