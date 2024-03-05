@@ -13,7 +13,7 @@ function DateHead({date}) {
   return (
     <>
       <View style={[styles.statusBarPlaceholder, {height: top}]} />
-      <StatusBar backgroundColor="#26a69a" barStyle='dark-content'/>
+      <StatusBar backgroundColor="#26a69a" barStyle="dark-content" />
       <View style={styles.block}>
         <Text style={styles.dateText}>{formatted}</Text>
       </View>
