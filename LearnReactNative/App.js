@@ -19,7 +19,7 @@ const App = () => {
     <SafeAreaProvider>
       <SafeAreaView edges={['bottom']} style={styles.block}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          behavior={Platform.select({ios:'padding'})}
           style={styles.avoid}>
           <DateHead date={today} />
           <Empty />
