@@ -10,10 +10,11 @@ import {
   Keyboard,
 } from 'react-native';
 
-function AddTodo() {
+function AddTodo({onInsert}) {
   const [text, setText] = useState('');
 
   const onPress = () => {
+    onInsert(text);
     setText('');
     Keyboard.dismiss();
   };
@@ -36,10 +37,16 @@ function AddTodo() {
       />
 
       {Platform.select({
-        ios: <TouchableOpacity activeOpacity={0.5} onPress={onPress}>{button}</TouchableOpacity>,
+        ios: (
+          <TouchableOpacity activeOpacity={0.5} onPress={onPress}>
+            {button}
+          </TouchableOpacity>
+        ),
         android: (
           <View style={styles.circleWrapper}>
-            <TouchableNativeFeedback onPress={onPress}>{button}</TouchableNativeFeedback>
+            <TouchableNativeFeedback onPress={onPress}>
+              {button}
+            </TouchableNativeFeedback>
           </View>
         ),
       })}
