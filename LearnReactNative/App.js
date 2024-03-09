@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import AddTodo from './components/AddTodo';
 import Empty from './components/Empty';
 import TodoList from './components/TodoList';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const App = () => {
   const today = new Date();
@@ -20,6 +21,36 @@ const App = () => {
     {id: 2, text: '리액트 네이티브 기초 공부', done: false},
     {id: 3, text: '투두리스트 만들어보기', done: false},
   ]);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const rawTodos = await AsyncStorage.getItem('todos');
+        const savedTodos = JSON.parse(rawTodos);
+        setTodos(savedTodos);
+      } catch (e) {
+        console.log('Failed to load todos');
+      }
+    }
+    load();
+  }, []);
+
+  useEffect(() => {
+    async function save() {
+      try {
+        console.log("todos SAVE!!!");
+        await AsyncStorage.setItem('todos', JSON.stringify(todos));
+      } catch (e) {
+        console.log('Failed to save todos');
+      }
+    }
+    save();
+
+    return () => {
+      console.log("NOW TODOS!!!");
+      console.log(todos);
+    }
+  }, [todos]);
 
   const onInsert = text => {
     const nextId =
