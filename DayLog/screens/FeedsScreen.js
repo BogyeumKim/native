@@ -1,24 +1,18 @@
-import {StyleSheet, Text, View} from 'react-native';
-import LogContext from '../contexts/LogContext';
+import React from 'react';
+import {StyleSheet, View} from 'react-native';
+import FloatingWriteButton from '../components/FloatingWriteButton';
 
 function FeedsScreen() {
   return (
     <View style={styles.block}>
-      <Box>{value => <Text>{value}</Text>}</Box>
+      <FloatingWriteButton />
     </View>
   );
 }
 
-function Box({children}) {
-  return <View style={styles.box}>{children('Hello World')}</View>;
-}
-
 const styles = StyleSheet.create({
-  box: {
-    borderWidth: 2,
-    padding: 16,
-    borderBottomColor: 'black',
-    marginBottom: 16,
+  block: {
+    flex: 1,
   },
 });
 
