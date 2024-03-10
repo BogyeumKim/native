@@ -6,9 +6,9 @@ import {LogContextProvider} from './contexts/LogContext';
 const App = () => {
   return (
     <NavigationContainer>
-      {/* <LogContextProvider> */}
+      <LogContextProvider>
         <RootStack />
-      {/* </LogContextProvider> */}
+      </LogContextProvider>
     </NavigationContainer>
   );
 };
