@@ -1,15 +1,22 @@
-import {Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 
 type Props = {
-    name : string
-}
+  name: string;
+  isActive?: boolean;
+};
 
-function Profile({name} : Props) {
+function Profile({name,isActive}: Props) {
   return (
-    <View>
+    <View style={isActive && styles.activeStyle}>
       <Text>Name</Text>
     </View>
   );
 }
 
 export default Profile;
+
+const styles = StyleSheet.create({
+    activeStyle : {
+        backgroundColor : 'yellow'
+    }
+})
