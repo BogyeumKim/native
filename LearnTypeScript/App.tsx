@@ -1,12 +1,13 @@
 import React from 'react';
 import Profile from './Profile';
-import {Text} from 'react-native';
+import {Text, View} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
 
 function App(): React.JSX.Element {
   return (
-    <Profile name="John Doe">
-      <Text>Hello TypeScript?</Text>
-    </Profile>
+    <NavigationContainer>
+      <Text>Todo 화면추가</Text>
+    </NavigationContainer>
   );
 }
 
