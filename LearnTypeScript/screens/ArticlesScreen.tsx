@@ -1,7 +1,8 @@
-import {Text, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import {useQuery} from 'react-query';
 import {getArticles} from '../api/articles';
 import axios from 'axios';
+import Articles from '../components/Articles';
 
 function ArticlesScreen() {
 
@@ -19,14 +20,19 @@ function ArticlesScreen() {
   
   
   const {data,isLoading} = useQuery('articles',getArticles);
-
   console.log({data,isLoading});
+  
+  if (!data) {
+    return <ActivityIndicator size="large" style={styles.spinner} />;
+  }
 
-  return (
-    <View>
-      <Text>Articlessdddds</Text>
-    </View>
-  );
+  return <Articles articles={data} />;
 }
+
+const styles = StyleSheet.create({
+  spinner: {
+    flex: 1,
+  },
+});
 
 export default ArticlesScreen;
