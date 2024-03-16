@@ -5,11 +5,10 @@ import MainTab from "./screens/MainTab";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-function RootStack():React.JSX.Element {
+function RootStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="MainTab" component={MainTab} options={{headerShown : false}} />
-      <View>{/*TODO*/}</View>
     </Stack.Navigator>
   );
 }
