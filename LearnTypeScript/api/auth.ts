@@ -1,5 +1,6 @@
 import client from './client';
 import {AuthResult, User} from './types';
+import {AxiosError} from 'axios';
 
 interface RegisterParams {
   username: string;
@@ -29,3 +30,18 @@ export async function getLoginStatus() {
   const response = await client.get<User>('/users/me');
   return response.data;
 }
+
+
+type AuthErrorData = {
+  messages: {
+    id: string;
+    message: string;
+  }[];
+}[];
+
+export type AuthError = AxiosError<{
+  statusCode: number;
+  error: string;
+  message: AuthErrorData;
+  data: AuthErrorData;
+}>;
