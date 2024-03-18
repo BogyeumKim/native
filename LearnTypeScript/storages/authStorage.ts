@@ -1,7 +1,7 @@
 import { MMKV } from "react-native-mmkv";
 import { AuthResult } from "../api/types";
 
-const storage = new MMKV();
+export const storage = new MMKV();
 
 const key = 'auth';
 
