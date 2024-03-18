@@ -1,15 +1,26 @@
 import {useMutation} from 'react-query';
 import {AuthError, login} from '../api/auth';
 import {Alert} from 'react-native';
+import {useUserState} from '../contexts/UserContext';
+import {useNavigation} from '@react-navigation/native';
+import {RootStackNavigationProp} from '../screens/types';
+import { applyToken } from '../api/client';
+import authStorage from '../storages/authStorage';
 
 export default function useLogin() {
+  const [, setUser] = useUserState();
+  const navigation = useNavigation<RootStackNavigationProp>();
+
   const mutation = useMutation(login, {
     onSuccess: data => {
-      console.log(data);
-      /* TODO: 구현 예정 */
+      setUser(data.user);
+      navigation.pop();
+      applyToken(data.jwt);
+      authStorage.set(data);
     },
     onError: (error: AuthError) => {
       console.log(error);
+      console.log(error.response?.data);
       /* TODO: 구현 예정 */
     },
   });
