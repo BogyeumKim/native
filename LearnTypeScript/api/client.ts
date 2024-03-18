@@ -7,4 +7,8 @@ const client = axios.create({
   baseURL,
 });
 
+export function applyToken(jwt : string){
+  client.defaults.headers.Auth
+}
+
 export default client;
