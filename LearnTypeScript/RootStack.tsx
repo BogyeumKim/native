@@ -6,10 +6,12 @@ import ArticleScreen from "./screens/ArticelScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import LoginScreen from "./screens/LoginScreen";
 import MyArticlesScreen from "./screens/MyArticlesScreen";
+import useAuthLoadEffect from "./hooks/useAuthLoadEffect";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootStack() {
+  useAuthLoadEffect();
   return (
     <Stack.Navigator screenOptions={{headerBackTitle: '닫기'}}>
       <Stack.Screen name="MainTab" component={MainTab} options={{headerShown : false}} />
