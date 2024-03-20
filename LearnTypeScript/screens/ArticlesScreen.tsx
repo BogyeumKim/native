@@ -3,6 +3,7 @@ import {useQuery} from 'react-query';
 import {getArticles} from '../api/articles';
 import axios from 'axios';
 import Articles from '../components/Articles';
+import { useUserState } from '../contexts/UserContext';
 
 function ArticlesScreen() {
 
@@ -21,12 +22,14 @@ function ArticlesScreen() {
   
   const {data,isLoading} = useQuery('articles',getArticles);
   console.log({data,isLoading});
+  const [user] = useUserState();
+
   
   if (!data) {
     return <ActivityIndicator size="large" style={styles.spinner} />;
   }
 
-  return <Articles articles={data} />;
+  return <Articles articles={data} showWriteButton={!!user} />;
 }
 
 const styles = StyleSheet.create({
